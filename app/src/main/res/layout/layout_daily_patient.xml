@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="data"
+            type="com.kt.coronow.main.MainViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/daily_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/daily_cv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/main_color"
+            app:cardBackgroundColor="@color/main_color"
+            app:cardCornerRadius="3dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dailyCard_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/daily_country_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="@string/country_tv_title"
+                    android:textColor="@color/main_text_color"
+                    app:layout_constraintBottom_toTopOf="@+id/daily_country_cnt_tv"
+                    app:layout_constraintEnd_toStartOf="@+id/daily_sum_tv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/daily_sum_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="@string/daily_tv_title"
+                    android:textColor="@color/main_text_color"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline6"
+                    app:layout_constraintEnd_toStartOf="@+id/daily_aboard_tv"
+                    app:layout_constraintStart_toEndOf="@+id/daily_country_tv"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/daily_aboard_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="@string/aboard_tv_title"
+                    android:textColor="@color/main_text_color"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline6"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/daily_sum_tv"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="40dp" />
+
+                <TextView
+                    android:id="@+id/daily_country_cnt_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text='@{data.countryPatientCnt}'
+                    android:textColor="@color/highlight_text_color"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline3"
+                    app:layout_constraintEnd_toStartOf="@+id/daily_sum_cnt_tv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/guideline6" />
+
+                <TextView
+                    android:id="@+id/daily_sum_cnt_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text='@{data.dailyPatientCnt}'
+                    android:textColor="@color/highlight_text_color"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline3"
+                    app:layout_constraintEnd_toStartOf="@id/daily_aboard_cnt_tv"
+                    app:layout_constraintStart_toEndOf="@id/daily_country_cnt_tv"
+                    app:layout_constraintTop_toBottomOf="@id/guideline6" />
+
+                <TextView
+                    android:id="@+id/daily_aboard_cnt_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text='@{data.aboardPatientCnt}'
+                    android:textColor="@color/highlight_text_color"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/daily_sum_cnt_tv"
+                    app:layout_constraintTop_toBottomOf="@id/guideline6" />
+
+                <TextView
+                    android:id="@+id/daily_total_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/sum_tv_title"
+                    android:textColor="@color/main_text_color"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/daily_total_cnt_tv"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/daily_total_cnt_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text='@{data.totalPatientCnt}'
+                    android:textColor="@color/highlight_text_color"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_weight="2"
+                    app:layout_constraintStart_toEndOf="@+id/daily_total_tv" />
+
+                <ImageView
+                    android:id="@+id/daily_updown_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@drawable/ic_pagedown" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/daily_chart_cv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="5dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="3dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintBottom_toTopOf="@+id/daily_total_cnt_tv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/guideline5">
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/daily_chart_frg"
+                        android:name="com.kt.coronow.cart.chartFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/daily_care_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="@string/care_tv_title"
+                    android:textColor="@color/main_text_color"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline4"
+                    app:layout_constraintEnd_toStartOf="@+id/daily_care_ing_tv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/guideline3" />
+
+                <TextView
+                    android:id="@+id/daily_care_ing_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="@string/care_ing_tv_title"
+                    android:textColor="@color/main_text_color"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline4"
+                    app:layout_constraintEnd_toStartOf="@+id/daily_death_tv"
+                    app:layout_constraintStart_toEndOf="@+id/daily_care_tv"
+                    app:layout_constraintTop_toBottomOf="@id/guideline3" />
+
+                <TextView
+                    android:id="@+id/daily_death_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="@string/death_tv_title"
+                    android:textColor="@color/main_text_color"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/daily_care_ing_tv"
+                    app:layout_constraintTop_toBottomOf="@id/guideline3" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="150dp" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="190dp" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="300dp" />
+
+                <TextView
+                    android:id="@+id/daily_care_cnt_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text='@{data.carePatientCnt}'
+                    android:textColor="@color/highlight_text_color"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline5"
+                    app:layout_constraintEnd_toStartOf="@+id/daily_care_ing_cnt_tv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/guideline4" />
+
+                <TextView
+                    android:id="@+id/daily_care_ing_cnt_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text='@{data.careIngPatientCnt}'
+                    android:textColor="@color/highlight_text_color"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline5"
+                    app:layout_constraintEnd_toStartOf="@+id/daily_death_cnt_tv"
+                    app:layout_constraintStart_toEndOf="@+id/daily_care_cnt_tv"
+                    app:layout_constraintTop_toTopOf="@+id/guideline4" />
+
+                <TextView
+                    android:id="@+id/daily_death_cnt_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text='@{data.deathPatientCnt}'
+                    android:textColor="@color/highlight_text_color"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/daily_care_ing_cnt_tv"
+                    app:layout_constraintTop_toTopOf="@+id/guideline4" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

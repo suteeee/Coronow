@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Coronow</string>
+    <string name="country_tv_title">국내발생</string>
+    <string name="daily_tv_title">일일 확진자</string>
+    <string name="aboard_tv_title">해외발생</string>
+    <string name="sum_tv_title">누적 확진자</string>
+    <string name="care_tv_title">격리해제</string>
+    <string name="care_ing_tv_title">치료중</string>
+    <string name="death_tv_title">사망자</string>
+</resources>
