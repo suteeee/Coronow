@@ -9,8 +9,8 @@
     <color name="white">#FFFFFFFF</color>
 
     <!--custom-->
-    <color name="main_color">#CEECF5</color>
-    <color name="background_color">#FFFFFFFF</color>
+    <color name="main_color">#FFFFFF</color>
+    <color name="background_color">#F2F2F2</color>
     <color name="main_text_color">#000000</color>
     <color name="highlight_text_color">#000000</color>
 </resources>

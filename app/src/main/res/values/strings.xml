@@ -7,4 +7,7 @@
     <string name="care_tv_title">격리해제</string>
     <string name="care_ing_tv_title">치료중</string>
     <string name="death_tv_title">사망자</string>
+
+    <string name="bottom_home_title">확진자 현황</string>
+    <string name="bottom_distance_title">거리두기 현황</string>
 </resources>
