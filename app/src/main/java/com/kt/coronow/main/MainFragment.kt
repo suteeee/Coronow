@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kt.coronow.R
 import com.kt.coronow.databinding.MainFragmentBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainFragment : Fragment() {
     companion object { fun getInstance() = MainFragment() }
@@ -26,23 +29,6 @@ class MainFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             data = viewModel
         }
-
-
-
-        val list = listOf(
-            ViewList(ViewList.DAILY),
-            ViewList(ViewList.CITY)
-        )
-
-        val adapter = MainRecycleAdapter(list,viewModel)
-        binding.mainRv.layoutManager = LinearLayoutManager(requireContext(),RecyclerView.VERTICAL,false)
-        binding.mainRv.adapter = adapter
-
-        viewModel.initDailyInfo(binding.mainRv.adapter as MainRecycleAdapter)
-
-        viewModel.dailyPatientCnt.observe(viewLifecycleOwner, {
-            (binding.mainRv.adapter as MainRecycleAdapter).notifyDataSetChanged()
-        })
 
         return binding.root
     }

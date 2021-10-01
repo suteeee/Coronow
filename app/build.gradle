@@ -3,6 +3,8 @@ plugins {
     id 'kotlin-android'
 }
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 30
 
@@ -51,6 +53,23 @@ dependencies {
 
     //handshake exception
     implementation 'org.conscrypt:conscrypt-android:2.5.0'
+
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+
+    //json converter
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
+
+    //xml parser
+    implementation 'com.tickaroo.tikxml:annotation:0.8.13'
+    implementation 'com.tickaroo.tikxml:core:0.8.13'
+    implementation 'com.tickaroo.tikxml:retrofit-converter:0.8.13'
+
+    //chart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    kapt 'com.tickaroo.tikxml:processor:0.8.13'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
