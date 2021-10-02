@@ -11,7 +11,9 @@ import kotlinx.coroutines.launch
 
 class ChartViewModel:ViewModel() {
     var entries  = ArrayList<Entry>()
+    val sevenGet = MutableLiveData<Boolean>(false)
     val totalGet = MutableLiveData<Boolean>(false)
+    val alldayGet = MutableLiveData<Boolean>(false)
 
     fun entriesSet(list: ArrayList<String>) {
         entries.clear()
@@ -23,10 +25,24 @@ class ChartViewModel:ViewModel() {
     }
 
     fun switchChartToTotal() {
-        if(totalGet.value == false) {
+        if(totalGet.value == false && alldayGet.value == false) {
             CoroutineScope(Dispatchers.IO).launch {
                 RestRepository.getAllDate(totalGet)
             }
+        }else{
+            totalGet.value = false
+            totalGet.value = true
+        }
+    }
+
+    fun switchChartToAllDays() {
+        if(totalGet.value == false && alldayGet.value == false) {
+            CoroutineScope(Dispatchers.IO).launch {
+                RestRepository.getAllDate(alldayGet)
+            }
+        }else {
+            alldayGet.value = false
+            alldayGet.value = true
         }
     }
 }

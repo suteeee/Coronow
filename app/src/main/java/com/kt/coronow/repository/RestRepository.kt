@@ -26,64 +26,74 @@ object RestRepository {
         .build()
 
     fun getRestApi(apiCalled: MutableLiveData<Boolean>) {
-        apiCalled.postValue(false)
+        if(weekIncdecList.isEmpty()) {
+            apiCalled.postValue(false)
 
-        val week = DateRepository.getWeek()
-        Log.d("weekdays",week.toString())
+            val week = DateRepository.getWeek()
+            Log.d("weekdays",week.toString())
 
 
-        val CoronaService = retrofit.create(CoronaService::class.java)
-        CoronaService
-            .getKCorona(CoronaApi.KOREA_CORONA_API_KEY,"1","10", week[0],week[6])
-            .enqueue(object : Callback<CoronaData> {
-                override fun onResponse(call: Call<CoronaData>, response: Response<CoronaData>) {
-                    if(response.isSuccessful) {
-                        Log.d("item",response.message())
-                        val data = (response.body() as CoronaData)
-                        Log.d("item",data.toString())
-                        data.body?.items?.item?.forEach {
-                            if(it.gubun == "합계"){
-                                weekIncdecList.add(it.incDec.toString())
+            val CoronaService = retrofit.create(CoronaService::class.java)
+            CoronaService
+                .getKCorona(CoronaApi.KOREA_CORONA_API_KEY,"1","10", week[0],week[6])
+                .enqueue(object : Callback<CoronaData> {
+                    override fun onResponse(call: Call<CoronaData>, response: Response<CoronaData>) {
+                        if(response.isSuccessful) {
+                            Log.d("item",response.message())
+                            val data = (response.body() as CoronaData)
+                            Log.d("item",data.toString())
+                            data.body?.items?.item?.forEach {
+                                if(it.gubun == "합계"){
+                                    weekIncdecList.add(it.incDec.toString())
+                                }
                             }
+                            weekIncdecList.reverse()
+                            Log.d("item", weekIncdecList.toString())
+                            apiCalled.postValue(true)
                         }
-                        weekIncdecList.reverse()
-                        Log.d("item", weekIncdecList.toString())
-                        apiCalled.postValue(true)
                     }
-                }
-                override fun onFailure(call: Call<CoronaData>, t: Throwable) {
-                    Log.d("item",t.message.toString())
-                }
-            })
+                    override fun onFailure(call: Call<CoronaData>, t: Throwable) {
+                        Log.d("item",t.message.toString())
+                    }
+                })
+        }
     }
 
-    fun getAllDate(totalGet: MutableLiveData<Boolean>) {
-        val AllService = retrofit.create(CoronaAllService::class.java)
-        AllService.getAllCorona(CoronaApi.KOREA_CORONA_API_KEY,"1","10", FIRST_DAY,DateRepository.today)
-            .enqueue(object:Callback<CoronaAllData> {
-                override fun onResponse(call: Call<CoronaAllData>, response: Response<CoronaAllData>
-                ) {
-                    if(response.isSuccessful) {
-                        val data = (response.body() as CoronaAllData)
-                        val itemList = data.body?.items?.item
-                        val itemSize = itemList?.size?.minus(1)
+    fun getAllDate(get: MutableLiveData<Boolean>) {
+        if(allDaysIncList.isEmpty() && allIncdecList.isEmpty()) {
+            val AllService = retrofit.create(CoronaAllService::class.java)
+            AllService.getAllCorona(CoronaApi.KOREA_CORONA_API_KEY,"1","10", FIRST_DAY,DateRepository.today)
+                .enqueue(object:Callback<CoronaAllData> {
+                    override fun onResponse(call: Call<CoronaAllData>, response: Response<CoronaAllData>
+                    ) {
+                        if(response.isSuccessful) {
+                            val data = (response.body() as CoronaAllData)
+                            val itemList = data.body?.items?.item
+                            val itemSize = itemList?.size?.minus(1)
 
-                        for(i in itemSize?.downTo(0)!!){
-                            allIncdecList.add(itemList[i].decideCnt.toString())
-                            if(i < itemSize) {
-                                val dcnt = itemList[i+1].decideCnt?.toInt()?.minus(itemList[i].decideCnt?.toInt()!!)
-                                allDaysIncList.add(dcnt.toString())
+                            for(i in itemSize?.downTo(0)!!){
+                                var startday = itemList[i].decideCnt?.toInt()
+                                if(startday == 72328) { startday = 115925 } //수치 오차 보정(2021/4/21일)
+
+                                allIncdecList.add(startday.toString())
+
+                                if(i < itemSize) {
+                                    var endday = itemList[i+1].decideCnt?.toInt()
+                                    if(endday == 72328) { endday = 115925 } //수치 오차 보정(2021/4/21일)
+
+                                    var dcnt = (startday?.minus(endday!!))
+                                    if(dcnt!! < 0 ) dcnt = 0
+                                    allDaysIncList.add(dcnt.toString())
+                                }
                             }
+                            get.value = true
                         }
-
-                        totalGet.value = true
                     }
-                }
 
-                override fun onFailure(call: Call<CoronaAllData>, t: Throwable) {
+                    override fun onFailure(call: Call<CoronaAllData>, t: Throwable) {
 
-                }
-
-            })
+                    }
+                })
+        }
     }
 }

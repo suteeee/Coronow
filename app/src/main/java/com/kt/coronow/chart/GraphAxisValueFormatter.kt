@@ -5,13 +5,17 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.kt.coronow.main.MainViewModel
 
-class GraphAxisValueFormatter(val list:ArrayList<String>):ValueFormatter(){
+class GraphAxisValueFormatter(val list:ArrayList<String>, val type:Int):ValueFormatter(){
     var idx = 0
 
     override fun getFormattedValue(value: Float): String {
-        idx = value.toInt()
-        Log.d("weekidx",idx.toString())
-        return list[idx]
+        try {
+            idx = value.toInt()
+            return list[idx++]
+        }
+        catch (e:IndexOutOfBoundsException) {
+        }
+        return list[0]
     }
 
 }

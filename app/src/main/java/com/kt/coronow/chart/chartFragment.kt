@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -31,6 +33,10 @@ class chartFragment : Fragment() {
     private lateinit var mainViewModel: MainViewModel
     private lateinit var binding:ChartFragmentBinding
     private val chart:LineChart by lazy {binding.chart}
+    private val sevenBtn by lazy {binding.chartSevenDaysBtn}
+    private val alldayBtn by lazy {binding.chartAllDaysBtn}
+    private val totalBtn by lazy {binding.chartTotalBtn}
+
     val SEVENDAYS = 0
     val ALLDAYS = 1
     val TOTAL = 2
@@ -47,24 +53,47 @@ class chartFragment : Fragment() {
 
         mainViewModel.apiCalled.observe(viewLifecycleOwner, {
             if(it) {
-                Log.d("week",DateRepository.weekdays.toString())
                 viewModel.entriesSet(RestRepository.weekIncdecList)
                 chartDraw(DateRepository.weekdays,SEVENDAYS)
             }
         })
 
-        binding.chartTotalBtn.setOnClickListener {
+        sevenBtn.setOnClickListener {
+            viewModel.entriesSet(RestRepository.weekIncdecList)
+            chartDraw(DateRepository.weekdays,SEVENDAYS)
+            setSelectButtonDesign(it as Button)
+            setUnSelectButtonDesign(alldayBtn,totalBtn)
+
+        }
+
+        totalBtn.setOnClickListener {
             viewModel.switchChartToTotal()
+
+            setSelectButtonDesign(it as Button)
+            setUnSelectButtonDesign(sevenBtn,alldayBtn)
+        }
+
+        alldayBtn.setOnClickListener {
+            viewModel.switchChartToAllDays()
+
+            setSelectButtonDesign(it as Button)
+            setUnSelectButtonDesign(sevenBtn,totalBtn)
         }
 
 
 
         viewModel.totalGet.observe(viewLifecycleOwner,{
             if(it) {
-                Log.d("total",it.toString())
                 viewModel.entriesSet(RestRepository.allIncdecList)
                 chartDraw(RestRepository.allIncdecList,TOTAL)
 
+            }
+        })
+
+        viewModel.alldayGet.observe(viewLifecycleOwner,{
+            if(it) {
+                viewModel.entriesSet(RestRepository.allDaysIncList)
+                chartDraw(RestRepository.allDaysIncList,ALLDAYS)
             }
         })
 
@@ -81,18 +110,20 @@ class chartFragment : Fragment() {
                     setDrawCircleHole(true)
                     setDrawCircles(true)
                     setDrawValues(true)
+                    color = Color.parseColor("#FFA1B4DC")
                 }
                 else -> {
                     lineWidth = 2F
                     setDrawCircleHole(false)
                     setDrawCircles(false)
                     setDrawValues(false)
+                    color = Color.RED
                 }
             }
 
             setCircleColor(Color.parseColor("#FFA1B4DC"))
             circleHoleColor = Color.BLUE
-            color = Color.parseColor("#FFA1B4DC")
+
 
             setDrawHorizontalHighlightIndicator(false)
             setDrawHighlightIndicators(false)
@@ -104,13 +135,16 @@ class chartFragment : Fragment() {
 
         val xAxis = chart.xAxis
         xAxis.run {
-            if(type != 0) {
+           if(type != 0) {
                 setDrawLabels(false)
+            } else {
+                setDrawLabels(true)
             }
             textColor = Color.BLACK
             position = XAxis.XAxisPosition.BOTTOM
-            valueFormatter = GraphAxisValueFormatter(values)
             labelCount = values.size-1
+            valueFormatter = GraphAxisValueFormatter(values,type)
+            setDrawGridLines(false)
             enableGridDashedLine(8f,24f,0f)
         }
 
@@ -145,6 +179,18 @@ class chartFragment : Fragment() {
 
     }
 
+    fun setSelectButtonDesign(b:Button) {
+        b.background = ResourcesCompat.getDrawable(resources,R.drawable.button_select,null)
+        b.setTextColor(ResourcesCompat.getColor(resources,R.color.blue,null))
+    }
 
+    fun setUnSelectButtonDesign(vararg b:Button) {
+
+        b.forEach {
+            it.background = ResourcesCompat.getDrawable(resources,R.drawable.button_unselect,null)
+            it.setTextColor(ResourcesCompat.getColor(resources,R.color.main_text_color,null))
+        }
+
+    }
 
 }
