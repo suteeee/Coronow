@@ -11,7 +11,19 @@ class GraphAxisValueFormatter(val list:ArrayList<String>, val type:Int):ValueFor
     override fun getFormattedValue(value: Float): String {
         try {
             idx = value.toInt()
-            return list[idx++]
+            return if(type != chartFragment.SEVENDAYS) {
+
+                val str1 = list[idx].substring(4..5)
+                val str2 = list[idx].substring(6..7)
+
+                val res = "$str1.$str2"
+                idx++
+
+                res
+            }else {
+             return   list[idx++]
+            }
+
         }
         catch (e:IndexOutOfBoundsException) {
         }

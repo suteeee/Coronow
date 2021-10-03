@@ -19,9 +19,11 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.kt.coronow.R
 import com.kt.coronow.databinding.ChartFragmentBinding
+import com.kt.coronow.databinding.LayoutChartInfoBinding
 import com.kt.coronow.main.MainActivity
 import com.kt.coronow.main.MainViewModel
 import com.kt.coronow.repository.DateRepository
+import com.kt.coronow.repository.JsonRepository
 import com.kt.coronow.repository.RestRepository
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,18 +34,28 @@ class chartFragment : Fragment() {
     private lateinit var viewModel: ChartViewModel
     private lateinit var mainViewModel: MainViewModel
     private lateinit var binding:ChartFragmentBinding
+    private lateinit var infoBinding:LayoutChartInfoBinding
+
+
     private val chart:LineChart by lazy {binding.chart}
     private val sevenBtn by lazy {binding.chartSevenDaysBtn}
     private val alldayBtn by lazy {binding.chartAllDaysBtn}
     private val totalBtn by lazy {binding.chartTotalBtn}
 
-    val SEVENDAYS = 0
-    val ALLDAYS = 1
-    val TOTAL = 2
+    companion object{
+        val SEVENDAYS = 0
+        val ALLDAYS = 1
+        val TOTAL = 2
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewModel = ViewModelProvider(this).get(ChartViewModel::class.java)
         mainViewModel = (requireActivity() as MainActivity).viewModel
+        infoBinding =  LayoutChartInfoBinding.inflate(LayoutInflater.from(context),container,false)
+        infoBinding.apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
 
         binding = DataBindingUtil.inflate(inflater, R.layout.chart_fragment, container, false)
         binding.apply {
@@ -85,7 +97,7 @@ class chartFragment : Fragment() {
         viewModel.totalGet.observe(viewLifecycleOwner,{
             if(it) {
                 viewModel.entriesSet(RestRepository.allIncdecList)
-                chartDraw(RestRepository.allIncdecList,TOTAL)
+                chartDraw(RestRepository.allDaylist,TOTAL)
 
             }
         })
@@ -93,7 +105,7 @@ class chartFragment : Fragment() {
         viewModel.alldayGet.observe(viewLifecycleOwner,{
             if(it) {
                 viewModel.entriesSet(RestRepository.allDaysIncList)
-                chartDraw(RestRepository.allDaysIncList,ALLDAYS)
+                chartDraw(RestRepository.allDaylist,ALLDAYS)
             }
         })
 
@@ -113,12 +125,13 @@ class chartFragment : Fragment() {
                     color = Color.parseColor("#FFA1B4DC")
                 }
                 else -> {
-                    lineWidth = 2F
+                    lineWidth = 1F
                     setDrawCircleHole(false)
                     setDrawCircles(false)
                     setDrawValues(false)
-                    color = Color.RED
+                    color = ResourcesCompat.getColor(resources,R.color.highlight_text_color,null)
                 }
+
             }
 
             setCircleColor(Color.parseColor("#FFA1B4DC"))
@@ -126,7 +139,9 @@ class chartFragment : Fragment() {
 
 
             setDrawHorizontalHighlightIndicator(false)
-            setDrawHighlightIndicators(false)
+            setDrawVerticalHighlightIndicator(true)
+            //setDrawHighlightIndicators(true)
+            highlightLineWidth = 2f
 
             valueTextColor  = Color.BLACK
             valueTextSize = 10f
@@ -135,14 +150,15 @@ class chartFragment : Fragment() {
 
         val xAxis = chart.xAxis
         xAxis.run {
-           if(type != 0) {
-                setDrawLabels(false)
+           if(type != SEVENDAYS) {
+                setDrawLabels(true)
+
             } else {
                 setDrawLabels(true)
             }
             textColor = Color.BLACK
             position = XAxis.XAxisPosition.BOTTOM
-            labelCount = values.size-1
+            labelCount = 6
             valueFormatter = GraphAxisValueFormatter(values,type)
             setDrawGridLines(false)
             enableGridDashedLine(8f,24f,0f)
@@ -152,6 +168,22 @@ class chartFragment : Fragment() {
         val yLAxis: YAxis = chart.axisLeft
         yLAxis.run {
             textColor = Color.BLACK
+            var ymax = 0f
+            when(type){
+                SEVENDAYS -> {
+                    ymax = calY(RestRepository.dayIncMax).toFloat()
+                }
+                ALLDAYS -> {
+                    ymax = calY(RestRepository.alldayMax).toFloat()
+                }
+                TOTAL -> {
+                    ymax = calY(RestRepository.allIncdecList.last().toInt()).toFloat()
+                }
+
+            }
+            Log.d("max","$ymax")
+            labelCount = 6
+            axisMaximum = ymax
 
         }
 
@@ -170,7 +202,11 @@ class chartFragment : Fragment() {
             setDrawGridBackground(false)
             setDescription(description)
             setPinchZoom(false)
-            //animateY(1000)
+
+            val mark = ChartMarkerView(requireContext(),layoutResource = R.layout.layout_chart_info,type,width)
+            mark.chartView = this
+            marker = mark
+
             invalidate()
         }
 
@@ -191,6 +227,20 @@ class chartFragment : Fragment() {
             it.setTextColor(ResourcesCompat.getColor(resources,R.color.main_text_color,null))
         }
 
+    }
+
+    fun calY(y:Int):Int {
+        val n = y.toString()
+        var res = ""
+        for(i in n.indices){
+            res += if(i == 0) {
+                (n[i]+1).toString()
+            } else{
+                "0"
+            }
+        }
+
+        return res.toInt()
     }
 
 }

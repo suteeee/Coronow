@@ -15,6 +15,7 @@ class ChartViewModel:ViewModel() {
     val totalGet = MutableLiveData<Boolean>(false)
     val alldayGet = MutableLiveData<Boolean>(false)
 
+
     fun entriesSet(list: ArrayList<String>) {
         entries.clear()
         Log.d("week",list.toString())

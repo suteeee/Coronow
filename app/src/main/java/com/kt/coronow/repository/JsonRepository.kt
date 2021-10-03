@@ -15,6 +15,9 @@ object JsonRepository {
     const val SPAN_NUM = "<span class=\"num\">"
     const val SPAN_END = "</span>"
     const val SPAN_BEFORE = "<span class=\"before\">"
+
+    var aboardCnt = "-"
+    var countryCnt = ""
     
 
     fun getDailyInfo(dataList: List<MutableLiveData<String>>, jsonCalled: MutableLiveData<Boolean>) {
@@ -24,21 +27,23 @@ object JsonRepository {
             val countryAndAboardCnt = doc?.select(".data")
             val totalCnt = doc?.select("div.liveNum ul li .num")
             val before = doc?.select(".before")
-            Log.d("items",before.toString())
-            Log.d("items2",totalCnt.toString())
+
 
             if(!before.isNullOrEmpty() && !countryAndAboardCnt.isNullOrEmpty() && !totalCnt.isNullOrEmpty()){
-                val dailycnt = getInt(before[0].toString())
-                val total = getInt(totalCnt[0].toString())
+                countryCnt = getInt(countryAndAboardCnt[0].toString(),true)
+                aboardCnt = getInt(countryAndAboardCnt[1].toString(),false)
 
-                val carecnt = getInt(before[1].toString())
-                val careTotalCnt = getInt(totalCnt[1].toString())
+                val dailycnt = getInt(before[0].toString(),false)
+                val total = getInt(totalCnt[0].toString(),false)
 
-                val careIngCnt = getInt(before[2].toString())
-                val careIngTotalCnt = getInt(totalCnt[2].toString())
+                val carecnt = getInt(before[1].toString(),false)
+                val careTotalCnt = getInt(totalCnt[1].toString(),false)
 
-                val deathCnt = getInt(before[4].toString())
-                val deathTotalCnt = getInt(totalCnt[3].toString())
+                val careIngCnt = getInt(before[2].toString(),false)
+                val careIngTotalCnt = getInt(totalCnt[2].toString(),false)
+
+                val deathCnt = getInt(before[3].toString(),false)
+                val deathTotalCnt = getInt(totalCnt[3].toString(),false)
 
                 dataList[0].postValue(dailycnt)
                 dataList[1].postValue(total)
@@ -58,12 +63,7 @@ object JsonRepository {
 
     }
 
-
-    fun removeTag(str:String,firstTag:String, endTag:String) :String{
-        return str.replace(firstTag,"").replace(endTag,"").replace(",","")
-    }
-
-    fun getInt(str:String):String{
+    fun getInt(str:String,withoutDot:Boolean):String{
         var num = ""
         str.forEach {
             when(it) {
@@ -71,7 +71,7 @@ object JsonRepository {
                     num += it.toString()
                 }
                 ',' -> {
-                    num += it.toString()
+                    if(withoutDot) num += it.toString()
                 }
             }
         }

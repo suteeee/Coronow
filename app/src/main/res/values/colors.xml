@@ -14,4 +14,5 @@
     <color name="background_color">#F2F2F2</color>
     <color name="main_text_color">#000000</color>
     <color name="highlight_text_color">#FE2E64</color>
+    <color name="orange">#FE9A2E</color>
 </resources>

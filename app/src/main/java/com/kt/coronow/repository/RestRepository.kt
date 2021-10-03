@@ -11,13 +11,30 @@ import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import okhttp3.OkHttpClient
 import retrofit2.*
+import kotlin.math.abs
 
 object RestRepository {
     const val FIRST_DAY = "20200203"
 
+
+    /*
+    *
+    * @param allIncdecList 누적 확진자 리스트
+    * */
     val allIncdecList = ArrayList<String>() //누적 확진자 리스트
     val weekIncdecList = ArrayList<String>() //일주일 확진자 리스트
     val allDaysIncList = ArrayList<String>() //전체기간 확진자 리스트
+
+    val allDaylist = ArrayList<String>()// 전체기간 리스트
+
+    val localCntList = ArrayList<String>()
+    val aboardCntList = ArrayList<String>()
+    val clearCntList = ArrayList<String>()
+
+    var dayIncMax = 0
+    var alldayMax = 0 //전체기간 최다 확진자
+    var allIncMax = 0 //누적 최다 확진자
+
 
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(CoronaApi.BASE_URL)
@@ -30,8 +47,6 @@ object RestRepository {
             apiCalled.postValue(false)
 
             val week = DateRepository.getWeek()
-            Log.d("weekdays",week.toString())
-
 
             val CoronaService = retrofit.create(CoronaService::class.java)
             CoronaService
@@ -39,21 +54,22 @@ object RestRepository {
                 .enqueue(object : Callback<CoronaData> {
                     override fun onResponse(call: Call<CoronaData>, response: Response<CoronaData>) {
                         if(response.isSuccessful) {
-                            Log.d("item",response.message())
                             val data = (response.body() as CoronaData)
-                            Log.d("item",data.toString())
                             data.body?.items?.item?.forEach {
                                 if(it.gubun == "합계"){
+                                    if(dayIncMax < it.incDec!!.toInt()) dayIncMax = it.incDec.toInt()
                                     weekIncdecList.add(it.incDec.toString())
+                                    localCntList.add(it.localOccCnt.toString())
+                                    aboardCntList.add(it.overFlowCnt.toString())
                                 }
                             }
                             weekIncdecList.reverse()
-                            Log.d("item", weekIncdecList.toString())
+                            localCntList.reverse()
+                            aboardCntList.reverse()
                             apiCalled.postValue(true)
                         }
                     }
                     override fun onFailure(call: Call<CoronaData>, t: Throwable) {
-                        Log.d("item",t.message.toString())
                     }
                 })
         }
@@ -73,16 +89,23 @@ object RestRepository {
 
                             for(i in itemSize?.downTo(0)!!){
                                 var startday = itemList[i].decideCnt?.toInt()
+                                val date = itemList[i].createDt?.substring(0..9)?.replace("-","")
+                                allDaylist.add(date!!)
+
                                 if(startday == 72328) { startday = 115925 } //수치 오차 보정(2021/4/21일)
+                                if(date == "20210421"){ startday = 115194 }
 
                                 allIncdecList.add(startday.toString())
+
+                                if(i == itemSize) { allDaysIncList.add(startday.toString()) }
 
                                 if(i < itemSize) {
                                     var endday = itemList[i+1].decideCnt?.toInt()
                                     if(endday == 72328) { endday = 115925 } //수치 오차 보정(2021/4/21일)
 
-                                    var dcnt = (startday?.minus(endday!!))
-                                    if(dcnt!! < 0 ) dcnt = 0
+                                    val dcnt = abs(abs(startday!!) - abs(endday!!))
+
+                                    if(alldayMax < dcnt) alldayMax = (dcnt)
                                     allDaysIncList.add(dcnt.toString())
                                 }
                             }

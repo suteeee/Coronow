@@ -15,19 +15,15 @@ object DateRepository {
     val allDaylist = ArrayList<String>()
 
     val formatWithDot =  SimpleDateFormat("MM.dd", Locale.KOREA)
+    val formatFullDay =  SimpleDateFormat("yyyyMMdd", Locale.KOREA)
 
     fun getDate() :ArrayList<String>{
         val cur = System.currentTimeMillis()
         val date = Date(cur)
 
         //today
-        val formatter = SimpleDateFormat("yyyyMMdd", Locale.KOREA).format(date)
+        val formatter = formatFullDay.format(date)
         today = formatter
-
-        Log.d("item", today)
-
-
-
 
         for(i in 6 downTo 0) {
             calendar.time = date
@@ -38,7 +34,6 @@ object DateRepository {
 
         }
 
-        Log.d("week", weekdays.toString())
 
         return weekDate
     }
@@ -51,24 +46,27 @@ object DateRepository {
         for(i in 6 downTo 0) {
             calendar.time = date
             calendar.add(Calendar.DATE,-i)
-            val weekDateFormat =  SimpleDateFormat("yyyyMMdd", Locale.KOREA)
-            list.add(weekDateFormat.format((calendar.time)))
+            list.add(formatFullDay.format((calendar.time)))
         }
         return list
     }
 
     fun getAllDate(){
-        val cur = System.currentTimeMillis()
-        val date = Date(cur)
-        calendar.set(2020,2,3)
+        calendar.set(2020,1,3)
 
         while(true) {
-            val day = formatWithDot.format(calendar.time)
-            if(day == weekdays[6]) break
-            else{
-                allDaylist.add(day)
-                calendar.add(Calendar.DATE,+1)
-            }
+            val day = formatFullDay.format(calendar.time)
+
+
+
+            allDaylist.add(day)
+
+
+            calendar.add(Calendar.DATE,+1)
+            if(day == today) break
+
         }
+        Log.d("day",allDaylist.last())
+        Log.d("day",allDaylist.size.toString())
     }
 }
