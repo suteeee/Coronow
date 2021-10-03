@@ -15,8 +15,11 @@ import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.kt.coronow.R
 import com.kt.coronow.databinding.ChartFragmentBinding
 import com.kt.coronow.databinding.LayoutChartInfoBinding
@@ -119,33 +122,45 @@ class chartFragment : Fragment() {
                 SEVENDAYS -> {
                     lineWidth = 2F
                     circleRadius = 6F
-                    setDrawCircleHole(true)
+                    setDrawCircleHole(false)
                     setDrawCircles(true)
                     setDrawValues(true)
-                    color = Color.parseColor("#FFA1B4DC")
                 }
                 else -> {
                     lineWidth = 1F
                     setDrawCircleHole(false)
                     setDrawCircles(false)
                     setDrawValues(false)
-                    color = ResourcesCompat.getColor(resources,R.color.highlight_text_color,null)
+
                 }
 
             }
-
-            setCircleColor(Color.parseColor("#FFA1B4DC"))
+            color = ResourcesCompat.getColor(resources,R.color.line_color,null)
+            setCircleColor(ResourcesCompat.getColor(resources,R.color.line_color,null))
             circleHoleColor = Color.BLUE
 
 
             setDrawHorizontalHighlightIndicator(false)
             setDrawVerticalHighlightIndicator(true)
-            //setDrawHighlightIndicators(true)
-            highlightLineWidth = 2f
+
+            highlightLineWidth = 1f
+            highLightColor = ResourcesCompat.getColor(resources,R.color.highlight_line_color,null)
+
+
 
             valueTextColor  = Color.BLACK
             valueTextSize = 10f
         }
+
+        /*val circleDataSet = LineDataSet(viewModel.circleEntry,null)
+        circleDataSet.run {
+            setDrawCircles(true)
+            color = ResourcesCompat.getColor(resources,R.color.highlight_text_color,null)
+            setDrawHorizontalHighlightIndicator(false)
+            setDrawVerticalHighlightIndicator(true)
+            setCircleColor(ResourcesCompat.getColor(resources,R.color.highlight_text_color,null))
+            setDrawValues(false)
+        }*/
 
 
         val xAxis = chart.xAxis
@@ -161,7 +176,7 @@ class chartFragment : Fragment() {
             labelCount = 6
             valueFormatter = GraphAxisValueFormatter(values,type)
             setDrawGridLines(false)
-            enableGridDashedLine(8f,24f,0f)
+            enableGridDashedLine(4f,24f,0f)
         }
 
 
@@ -172,12 +187,15 @@ class chartFragment : Fragment() {
             when(type){
                 SEVENDAYS -> {
                     ymax = calY(RestRepository.dayIncMax).toFloat()
+                    axisMinimum = calYMin(RestRepository.dayIncMin).toFloat()
                 }
                 ALLDAYS -> {
                     ymax = calY(RestRepository.alldayMax).toFloat()
+                    axisMinimum = 0f
                 }
                 TOTAL -> {
                     ymax = calY(RestRepository.allIncdecList.last().toInt()).toFloat()
+                    axisMinimum = 0f
                 }
 
             }
@@ -200,18 +218,35 @@ class chartFragment : Fragment() {
         chart.apply {
             isDoubleTapToZoomEnabled = false
             setDrawGridBackground(false)
-            setDescription(description)
+            setDescription(null)
             setPinchZoom(false)
 
-            val mark = ChartMarkerView(requireContext(),layoutResource = R.layout.layout_chart_info,type,width)
+            val mark = ChartMarkerView(requireContext(),layoutResource = R.layout.layout_chart_info,type,binding.chartCircle)
+            val elevationMarker = ElevationMarker(requireContext(),layoutResource = R.layout.layout_dot)
+            elevationMarker.chartView = this
             mark.chartView = this
             marker = mark
-
             invalidate()
         }
 
-        val linedata = LineData(lineDataSet)
-        chart.data = linedata
+
+
+        val chartdata = LineData()
+        chartdata.addDataSet(lineDataSet)
+       // chartdata.addDataSet(circleDataSet)
+       // val linedata = LineData(lineDataSet)
+        chart.data = chartdata
+        chart.setOnChartValueSelectedListener(object:OnChartValueSelectedListener{
+            override fun onValueSelected(e: Entry?, h: Highlight?) {
+                binding.chartCircle.visibility = View.VISIBLE
+            }
+
+            override fun onNothingSelected() {
+                binding.chartCircle.visibility = View.GONE
+            }
+
+        })
+
 
     }
 
@@ -235,6 +270,20 @@ class chartFragment : Fragment() {
         for(i in n.indices){
             res += if(i == 0) {
                 (n[i]+1).toString()
+            } else{
+                "0"
+            }
+        }
+
+        return res.toInt()
+    }
+
+    fun calYMin(y:Int):Int {
+        val n = y.toString()
+        var res = ""
+        for(i in n.indices){
+            res += if(i == 0) {
+                (n[i]).toString()
             } else{
                 "0"
             }

@@ -15,7 +15,7 @@ import com.kt.coronow.repository.DateRepository
 import com.kt.coronow.repository.JsonRepository
 import com.kt.coronow.repository.RestRepository
 
-class ChartMarkerView(context: Context, layoutResource: Int, val type: Int, val pWidth:Int) : MarkerView(context, layoutResource) {
+class ChartMarkerView(context: Context, layoutResource: Int, val type: Int, vararg val circle:ImageView) : MarkerView(context, layoutResource) {
     var firstText:TextView = findViewById<TextView>(R.id.chartInfo_firstText)
     val secondText = findViewById<TextView>(R.id.chartInfo_secondText)
     val thirdText = findViewById<TextView>(R.id.chartInfo_thirdText)
@@ -25,8 +25,11 @@ class ChartMarkerView(context: Context, layoutResource: Int, val type: Int, val 
         super.setChartView(chart)
     }
 
-    override fun setOffset(offset: MPPointF?) {
-        super.setOffset(offset)
+    override fun getOffsetForDrawingAtPoint(posX: Float, posY: Float): MPPointF {
+        circle[0].x = posX - (circle[0].width / 2)
+        circle[0].y = posY + (circle[0].height * 6.2f)
+
+        return super.getOffsetForDrawingAtPoint(posX, posY)
     }
 
     override fun getOffset(): MPPointF {

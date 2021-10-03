@@ -11,18 +11,13 @@ import org.jsoup.nodes.Document
 
 object JsonRepository {
     const val BASE_URL = "http://ncov.mohw.go.kr/"
-    const val SPAN_DATA = "<span class=\"data\">"
-    const val SPAN_NUM = "<span class=\"num\">"
-    const val SPAN_END = "</span>"
-    const val SPAN_BEFORE = "<span class=\"before\">"
 
     var aboardCnt = "-"
     var countryCnt = ""
     
 
-    fun getDailyInfo(dataList: List<MutableLiveData<String>>, jsonCalled: MutableLiveData<Boolean>) {
+    fun getDailyInfo(dataList: List<MutableLiveData<String>>) {
         CoroutineScope(Dispatchers.IO).launch {
-            jsonCalled.postValue(false)
             val doc:Document? = Jsoup.connect(BASE_URL).get()
             val countryAndAboardCnt = doc?.select(".data")
             val totalCnt = doc?.select("div.liveNum ul li .num")

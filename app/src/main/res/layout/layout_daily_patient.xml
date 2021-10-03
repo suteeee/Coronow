@@ -54,17 +54,16 @@
 
                     <TextView
                         android:id="@+id/daily_sum_cnt_tv"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
-                        android:gravity="center_vertical"
+                        android:gravity="center|center_vertical"
                         android:text='@{data.dailyPatientCnt}'
                         android:textColor="@color/highlight_text_color"
                         android:textSize="18sp"
                         app:layout_constraintBottom_toTopOf="@+id/daily_total_cnt_tv"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/daily_sum_up"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/daily_total_tv" />
 
                     <TextView
@@ -84,15 +83,14 @@
                         android:id="@+id/daily_sum_up"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
                         android:text="▲"
                         android:textColor="@color/highlight_text_color"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toTopOf="@+id/daily_total_cnt_tv"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/daily_total_tv"
-                        app:layout_constraintEnd_toStartOf="@id/daily_sum_cnt_tv"/>
+                        app:layout_constraintEnd_toStartOf="@id/daily_sum_cnt_tv"
+                        app:layout_constraintTop_toBottomOf="@+id/daily_total_tv" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -120,17 +118,16 @@
 
                     <TextView
                         android:id="@+id/daily_care_cnt_tv"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
-                        android:gravity="center_vertical"
+                        android:gravity="center|center_vertical"
                         android:text='@{data.dailyCareCnt}'
                         android:textColor="@color/blue"
                         android:textSize="18sp"
                         app:layout_constraintBottom_toTopOf="@+id/daily_care_total_cnt_tv"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/daily_care_up"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/daily_care_tv" />
 
 
@@ -151,14 +148,13 @@
                         android:id="@+id/daily_care_up"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
                         android:text="▲"
                         android:textColor="@color/blue"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toTopOf="@+id/daily_care_total_cnt_tv"
                         app:layout_constraintEnd_toStartOf="@+id/daily_care_cnt_tv"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/daily_care_tv" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -187,17 +183,16 @@
 
                     <TextView
                         android:id="@+id/daily_care_ing_cnt_tv"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
-                        android:gravity="center_vertical"
+                        android:gravity="center|center_vertical"
                         android:text="@{data.careIngCnt}"
                         android:textColor="@color/main_text_color"
                         android:textSize="18sp"
                         app:layout_constraintBottom_toTopOf="@+id/daily_care_ing_total_cnt_tv"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/daily_care_ing_up"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/daily_care_ing_tv" />
 
 
@@ -217,14 +212,13 @@
                         android:id="@+id/daily_care_ing_up"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
                         android:text="▲"
                         android:textColor="@color/main_text_color"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toTopOf="@+id/daily_care_ing_total_cnt_tv"
                         app:layout_constraintEnd_toStartOf="@+id/daily_care_ing_cnt_tv"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/daily_care_ing_tv" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -253,9 +247,8 @@
 
                     <TextView
                         android:id="@+id/daily_death_cnt_tv"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
                         android:gravity="center_vertical"
                         android:text='@{data.deathCnt}'
@@ -263,7 +256,7 @@
                         android:textSize="18sp"
                         app:layout_constraintBottom_toTopOf="@+id/daily_death_total_cnt_tv"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/daily_death_up"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/daily_death_tv" />
 
                     <TextView
@@ -282,14 +275,13 @@
                         android:id="@+id/daily_death_up"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
                         android:text="▲"
                         android:textColor="@color/main_text_color"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toTopOf="@+id/daily_death_total_cnt_tv"
                         app:layout_constraintEnd_toStartOf="@+id/daily_death_cnt_tv"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/daily_death_tv" />
                      " />
 

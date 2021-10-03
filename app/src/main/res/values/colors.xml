@@ -13,6 +13,8 @@
     <color name="main_color">#FFFFFF</color>
     <color name="background_color">#F2F2F2</color>
     <color name="main_text_color">#000000</color>
+    <color name="line_color">#55FE2E64</color>
+    <color name="highlight_line_color">#33000000</color>
     <color name="highlight_text_color">#FE2E64</color>
     <color name="orange">#FE9A2E</color>
 </resources>

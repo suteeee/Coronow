@@ -20,8 +20,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        DateRepository.getDate()
-        DateRepository.getAllDate()
+        CoroutineScope(Dispatchers.Default).launch {
+            DateRepository.getDate()
+            DateRepository.getAllDate()
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
             viewModel.getApiData()

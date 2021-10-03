@@ -35,6 +35,8 @@ object RestRepository {
     var alldayMax = 0 //전체기간 최다 확진자
     var allIncMax = 0 //누적 최다 확진자
 
+    var dayIncMin = 999999999
+
 
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(CoronaApi.BASE_URL)
@@ -58,6 +60,8 @@ object RestRepository {
                             data.body?.items?.item?.forEach {
                                 if(it.gubun == "합계"){
                                     if(dayIncMax < it.incDec!!.toInt()) dayIncMax = it.incDec.toInt()
+                                    if(dayIncMin > it.incDec!!.toInt()) dayIncMin = it.incDec.toInt()
+
                                     weekIncdecList.add(it.incDec.toString())
                                     localCntList.add(it.localOccCnt.toString())
                                     aboardCntList.add(it.overFlowCnt.toString())
@@ -93,7 +97,7 @@ object RestRepository {
                                 allDaylist.add(date!!)
 
                                 if(startday == 72328) { startday = 115925 } //수치 오차 보정(2021/4/21일)
-                                if(date == "20210421"){ startday = 115194 }
+                                if(date == "20210421"){ startday = 115194 } //수치 오차 보정(2021/4/21일)
 
                                 allIncdecList.add(startday.toString())
 

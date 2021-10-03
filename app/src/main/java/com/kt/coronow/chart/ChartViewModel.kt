@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 
 class ChartViewModel:ViewModel() {
     var entries  = ArrayList<Entry>()
+    var circleEntry = ArrayList<Entry>()
     val sevenGet = MutableLiveData<Boolean>(false)
     val totalGet = MutableLiveData<Boolean>(false)
     val alldayGet = MutableLiveData<Boolean>(false)
@@ -18,11 +19,13 @@ class ChartViewModel:ViewModel() {
 
     fun entriesSet(list: ArrayList<String>) {
         entries.clear()
-        Log.d("week",list.toString())
+        //circleEntry.clear()
 
         for(i in 0 until list.size) {
             entries.add(Entry(i.toFloat(),list[i].toFloat()))
+           // circleEntry.add(Entry(i.toFloat(),list[i].toFloat()))
         }
+
     }
 
     fun switchChartToTotal() {
